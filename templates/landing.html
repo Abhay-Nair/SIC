@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aarogya Check</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <h1>Aarogya Check</h1>
+      <p>Role-based, privacy-first travel clearance workflow.</p>
+    </header>
+
+    <section class="card">
+      <div class="split">
+        <div>
+          <h2>Welcome</h2>
+          <p class="muted">
+            Migrants submit applications, doctors review sensitive medical reports, and officials issue approval letters.
+          </p>
+        </div>
+        <div style="min-width:260px">
+          <button id="open-login" class="primary">Login</button>
+          <a class="link-btn secondary" href="/migrant-dashboard" style="margin-top:10px; display:inline-block; width:100%; text-align:center; padding:10px 12px; border-radius:10px;">
+            New Migrant? Apply Here
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-3">
+      <div class="card">
+        <h2>Migrant</h2>
+        <p class="muted">Submit application, track approvals, download clearance once fully approved.</p>
+      </div>
+      <div class="card">
+        <h2>Doctor</h2>
+        <p class="muted">View sensitive details and medical reports. Approve/Reject medical fitness.</p>
+      </div>
+      <div class="card">
+        <h2>Government Official</h2>
+        <p class="muted">View non-sensitive data only. Upload approval letter and finalize approval.</p>
+      </div>
+    </section>
+
+    <div id="login-modal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" id="modal-backdrop"></div>
+      <div class="modal-card card">
+        <div class="split" style="align-items:flex-start">
+          <div>
+            <h2>Role Login</h2>
+            <p class="muted">Choose your role and login.</p>
+          </div>
+          <button id="close-login" class="secondary" style="width:auto; padding:8px 10px;">Close</button>
+        </div>
+
+        <label>Role</label>
+        <select id="role-select">
+          <option value="migrant">Migrant</option>
+          <option value="doctor">Doctor</option>
+          <option value="official">Government Official</option>
+        </select>
+
+        <form id="role-form" style="margin-top:8px;" enctype="multipart/form-data">
+          <div id="role-fields"></div>
+          <button type="submit">Login</button>
+        </form>
+
+        <div id="role-message" class="toast"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/landing.js"></script>
+</body>
+</html>

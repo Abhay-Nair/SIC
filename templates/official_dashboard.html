@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header class="split">
+      <div>
+        <h1>Government Official Dashboard</h1>
+        <p>Approve cleared migrants and issue letters.</p>
+      </div>
+      <button id="logout-btn" class="secondary">Logout</button>
+    </header>
+    <section class="card">
+      <h2>Create Doctor Account</h2>
+      <form id="create-doctor-form" class="grid grid-2" style="align-items:end;">
+        <div>
+          <label>Doctor ID</label>
+          <input type="text" name="doctor_id" required>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="text" name="password" required>
+        </div>
+        <div style="grid-column: span 2;">
+          <button type="submit">Create Doctor</button>
+        </div>
+      </form>
+      <div id="create-doctor-msg" class="toast"></div>
+    </section>
+    <section id="official-cards" class="grid grid-3"></section>
+    <div id="official-message" class="toast"></div>
+  </div>
+  <script src="/static/official.js"></script>
+</body>
+</html>

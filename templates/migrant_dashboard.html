@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migrant Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header class="split">
+      <div>
+        <h1>Migrant Dashboard</h1>
+        <p>Submit application and track approvals.</p>
+      </div>
+      <button id="logout-btn" class="secondary">Logout</button>
+    </header>
+
+    <section class="card">
+      <h2>Submit Application</h2>
+      <form id="application-form" enctype="multipart/form-data">
+        <div class="grid grid-2">
+          <div>
+            <label>Name</label>
+            <input type="text" name="name" required>
+          </div>
+          <div>
+            <label>Aadhar</label>
+            <input type="text" name="aadhar" required>
+          </div>
+          <div>
+            <label>Source</label>
+            <input type="text" name="source" required>
+          </div>
+          <div>
+            <label>Destination</label>
+            <input type="text" name="destination" required>
+          </div>
+          <div>
+            <label>Medium of Travel</label>
+            <input type="text" name="medium_of_travel" required>
+          </div>
+          <div>
+            <label>Email</label>
+            <input type="email" name="email" required>
+          </div>
+        </div>
+        <label>Medical Report (PDF/Image)</label>
+        <input type="file" name="medical_report" required>
+        <button type="submit">Submit / Update Application</button>
+      </form>
+      <div id="apply-message" class="toast"></div>
+    </section>
+
+    <section class="card">
+      <h2>Status</h2>
+      <div id="status-panel" class="status"></div>
+      <button id="download-clearance" class="primary" disabled>Download Clearance PDF</button>
+    </section>
+  </div>
+  <script src="/static/migrant.js"></script>
+</body>
+</html>

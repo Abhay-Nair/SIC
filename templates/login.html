@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aarogya Check | Login</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <h1>Aarogya Check</h1>
+      <p>Secure, role-based approvals for migrant travel.</p>
+    </header>
+    <main class="grid grid-3">
+      <section class="card">
+        <h2>Migrant Login</h2>
+        <form id="migrant-login">
+          <label>Email</label>
+          <input type="email" name="email" required>
+          <label>Aadhar</label>
+          <input type="text" name="aadhar" required>
+          <button type="submit">Login</button>
+        </form>
+        <p class="hint">New applicants can submit from the <a href="/migrant-dashboard">migrant dashboard</a>.</p>
+      </section>
+      <section class="card">
+        <h2>Doctor Login</h2>
+        <form id="doctor-login" enctype="multipart/form-data">
+          <label>Doctor ID</label>
+          <input type="text" name="doctor_id" required>
+          <label>Password</label>
+          <input type="password" name="password" required>
+          <label>Verification Card (PDF/Image)</label>
+          <input type="file" name="verification_card" required>
+          <button type="submit">Login</button>
+        </form>
+      </section>
+      <section class="card">
+        <h2>Official Login</h2>
+        <form id="official-login" enctype="multipart/form-data">
+          <label>Official ID</label>
+          <input type="text" name="official_id" required>
+          <label>Password</label>
+          <input type="password" name="password" required>
+          <label>Verification Card (PDF/Image)</label>
+          <input type="file" name="verification_card" required>
+          <button type="submit">Login</button>
+        </form>
+      </section>
+    </main>
+    <div id="login-message" class="toast"></div>
+  </div>
+  <script>
+    async function handleLogin(formId, url, redirectPath, useMultipart=false) {
+      const form = document.getElementById(formId);
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        let res;
+        if (useMultipart) {
+          const fd = new FormData(form);
+          res = await fetch(url, { method: "POST", body: fd });
+        } else {
+          const payload = Object.fromEntries(new FormData(form).entries());
+          res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+        }
+        const data = await res.json();
+        const msg = document.getElementById("login-message");
+        if (!res.ok) {
+          msg.textContent = data.error || "Login failed";
+          msg.classList.add("error");
+          return;
+        }
+        msg.classList.remove("error");
+        msg.textContent = "Login successful. Redirecting...";
+        window.location.href = redirectPath;
+      });
+    }
+    handleLogin("migrant-login", "/migrant/login", "/migrant-dashboard");
+    handleLogin("doctor-login", "/doctor/login", "/doctor-dashboard", true);
+    handleLogin("official-login", "/official/login", "/official-dashboard", true);
+  </script>
+</body>
+</html>
