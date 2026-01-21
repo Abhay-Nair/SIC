@@ -3,37 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Official Dashboard</title>
+  <title>Official Dashboard | Aarogya Check</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="layout">
     <header class="split">
       <div>
-        <h1>Government Official Dashboard</h1>
-        <p>Approve cleared migrants and issue letters.</p>
+        <h1>🏛️ Government Official Dashboard</h1>
+        <p>Approve cleared migrants and manage doctor accounts</p>
       </div>
-      <button id="logout-btn" class="secondary">Logout</button>
+      <button id="logout-btn" class="secondary" style="width: auto; padding: 12px 24px; margin: 0;">
+        🚪 Logout
+      </button>
     </header>
-    <section class="card">
-      <h2>Create Doctor Account</h2>
-      <form id="create-doctor-form" class="grid grid-2" style="align-items:end;">
+    
+    <section class="card" style="margin-bottom: 32px;">
+      <h2>👨‍⚕️ Create Doctor Account</h2>
+      <p class="muted" style="margin-bottom: 20px;">
+        Create new doctor accounts for authorized medical professionals. Only officials can perform this action.
+      </p>
+      <form id="create-doctor-form" class="grid grid-2" style="align-items: end;">
         <div>
-          <label>Doctor ID</label>
-          <input type="text" name="doctor_id" required>
+          <label>👨‍⚕️ Doctor ID</label>
+          <input type="text" name="doctor_id" required placeholder="e.g., DOC001">
         </div>
         <div>
-          <label>Password</label>
-          <input type="text" name="password" required>
+          <label>🔒 Password</label>
+          <input type="text" name="password" required placeholder="Set a secure password">
         </div>
         <div style="grid-column: span 2;">
-          <button type="submit">Create Doctor</button>
+          <button type="submit" class="primary">➕ Create Doctor Account</button>
         </div>
       </form>
-      <div id="create-doctor-msg" class="toast"></div>
+      <div id="create-doctor-msg" class="toast" style="margin-top: 16px;"></div>
     </section>
+    
+    <section class="card" style="margin-bottom: 32px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);">
+      <h2>📋 Approval Panel</h2>
+      <p class="muted" style="line-height: 1.8;">
+        Review doctor-approved migrants. Upload approval letters and finalize travel clearance. 
+        Note: You only see non-sensitive data. Medical reports are not accessible.
+      </p>
+    </section>
+    
     <section id="official-cards" class="grid grid-3"></section>
-    <div id="official-message" class="toast"></div>
+    <div id="official-message" class="toast" style="margin-top: 24px;"></div>
   </div>
   <script src="/static/official.js"></script>
 </body>

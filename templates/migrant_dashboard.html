@@ -3,59 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Migrant Dashboard</title>
+  <title>Migrant Dashboard | Aarogya Check</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="layout">
     <header class="split">
       <div>
-        <h1>Migrant Dashboard</h1>
-        <p>Submit application and track approvals.</p>
+        <h1>👤 Migrant Dashboard</h1>
+        <p>Submit your application and track approval status</p>
       </div>
-      <button id="logout-btn" class="secondary">Logout</button>
+      <button id="logout-btn" class="secondary" style="width: auto; padding: 12px 24px; margin: 0;">
+        🚪 Logout
+      </button>
     </header>
 
     <section class="card">
-      <h2>Submit Application</h2>
+      <h2>📝 Submit Application</h2>
+      <p class="muted" style="margin-bottom: 24px;">
+        Fill in your travel details and upload your medical report. You can update your application at any time.
+      </p>
       <form id="application-form" enctype="multipart/form-data">
         <div class="grid grid-2">
           <div>
-            <label>Name</label>
-            <input type="text" name="name" required>
+            <label>👤 Full Name</label>
+            <input type="text" name="name" required placeholder="Enter your full name">
           </div>
           <div>
-            <label>Aadhar</label>
-            <input type="text" name="aadhar" required>
+            <label>🆔 Aadhar Number</label>
+            <input type="text" name="aadhar" required placeholder="12-digit Aadhar number">
           </div>
           <div>
-            <label>Source</label>
-            <input type="text" name="source" required>
+            <label>📍 Source Location</label>
+            <input type="text" name="source" required placeholder="City/State you're traveling from">
           </div>
           <div>
-            <label>Destination</label>
-            <input type="text" name="destination" required>
+            <label>🎯 Destination</label>
+            <input type="text" name="destination" required placeholder="City/State you're traveling to">
           </div>
           <div>
-            <label>Medium of Travel</label>
-            <input type="text" name="medium_of_travel" required>
+            <label>🚗 Medium of Travel</label>
+            <input type="text" name="medium_of_travel" required placeholder="e.g., Bus, Train, Flight">
           </div>
           <div>
-            <label>Email</label>
-            <input type="email" name="email" required>
+            <label>📧 Email Address</label>
+            <input type="email" name="email" required placeholder="your.email@example.com">
           </div>
         </div>
-        <label>Medical Report (PDF/Image)</label>
-        <input type="file" name="medical_report" required>
-        <button type="submit">Submit / Update Application</button>
+        <label>📄 Medical Report (PDF/Image)</label>
+        <input type="file" name="medical_report" accept=".pdf,.png,.jpg,.jpeg" required>
+        <p class="muted" style="margin-top: 8px; font-size: 0.85rem;">
+          Upload a clear scan or photo of your medical report (Max 5MB)
+        </p>
+        <button type="submit" class="primary">📤 Submit / Update Application</button>
       </form>
       <div id="apply-message" class="toast"></div>
     </section>
 
     <section class="card">
-      <h2>Status</h2>
-      <div id="status-panel" class="status"></div>
-      <button id="download-clearance" class="primary" disabled>Download Clearance PDF</button>
+      <h2>📊 Application Status</h2>
+      <p class="muted" style="margin-bottom: 16px;">
+        Track your approval progress in real-time. Status updates automatically every 8 seconds.
+      </p>
+      <div id="status-panel" class="status">
+        <p class="muted">Loading status...</p>
+      </div>
+      <button id="download-clearance" class="primary" disabled style="margin-top: 20px;">
+        📥 Download Travel Clearance PDF
+      </button>
+      <p class="muted" style="margin-top: 12px; font-size: 0.85rem;">
+        Available only after both Doctor and Official approvals are complete.
+      </p>
     </section>
   </div>
   <script src="/static/migrant.js"></script>

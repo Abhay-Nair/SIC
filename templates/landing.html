@@ -3,72 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aarogya Check</title>
+  <title>Aarogya Check | Secure Travel Clearance</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="layout">
     <header>
-      <h1>Aarogya Check</h1>
-      <p>Role-based, privacy-first travel clearance workflow.</p>
+      <h1>🏥 Aarogya Check</h1>
+      <p>Secure, privacy-first travel clearance workflow for migrants</p>
     </header>
 
-    <section class="card">
+    <section class="card" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%); border-color: var(--accent);">
       <div class="split">
         <div>
-          <h2>Welcome</h2>
-          <p class="muted">
-            Migrants submit applications, doctors review sensitive medical reports, and officials issue approval letters.
+          <h2>Welcome to Aarogya Check</h2>
+          <p class="muted" style="font-size: 1.05rem; line-height: 1.8;">
+            A comprehensive platform where migrants submit applications, doctors review sensitive medical reports, 
+            and government officials issue approval letters. All with strict data privacy and role-based access control.
           </p>
         </div>
-        <div style="min-width:260px">
-          <button id="open-login" class="primary">Login</button>
-          <a class="link-btn secondary" href="/migrant-dashboard" style="margin-top:10px; display:inline-block; width:100%; text-align:center; padding:10px 12px; border-radius:10px;">
-            New Migrant? Apply Here
+        <div style="min-width: 280px; display: flex; flex-direction: column; gap: 12px;">
+          <button id="open-login" class="primary" style="width: 100%; margin: 0;">
+            🔐 Login
+          </button>
+          <a class="link-btn secondary" href="/migrant-dashboard?new=1" style="width: 100%; margin: 0;">
+            ✨ New Migrant? Apply Here
           </a>
         </div>
       </div>
     </section>
 
-    <section class="grid grid-3">
+    <section class="grid grid-3" style="margin-top: 32px;">
       <div class="card">
-        <h2>Migrant</h2>
-        <p class="muted">Submit application, track approvals, download clearance once fully approved.</p>
+        <h2>👤 Migrant</h2>
+        <p class="muted" style="line-height: 1.8;">
+          Submit your travel application with medical reports. Track approval status in real-time and download 
+          your travel clearance once both doctor and official approvals are complete.
+        </p>
+        <ul style="margin-top: 16px; padding-left: 20px; color: var(--muted); line-height: 2;">
+          <li>Upload medical reports</li>
+          <li>Real-time status tracking</li>
+          <li>Download clearance PDF</li>
+        </ul>
       </div>
       <div class="card">
-        <h2>Doctor</h2>
-        <p class="muted">View sensitive details and medical reports. Approve/Reject medical fitness.</p>
+        <h2>🩺 Doctor</h2>
+        <p class="muted" style="line-height: 1.8;">
+          Review applications with full access to sensitive medical details and reports. Approve or reject 
+          medical fitness based on comprehensive health assessments.
+        </p>
+        <ul style="margin-top: 16px; padding-left: 20px; color: var(--muted); line-height: 2;">
+          <li>View medical reports</li>
+          <li>Approve/Reject clearance</li>
+          <li>Secure verification</li>
+        </ul>
       </div>
       <div class="card">
-        <h2>Government Official</h2>
-        <p class="muted">View non-sensitive data only. Upload approval letter and finalize approval.</p>
+        <h2>🏛️ Government Official</h2>
+        <p class="muted" style="line-height: 1.8;">
+          Review non-sensitive migrant data only. Upload approval letters and finalize travel clearance. 
+          Manage doctor account creation.
+        </p>
+        <ul style="margin-top: 16px; padding-left: 20px; color: var(--muted); line-height: 2;">
+          <li>Issue approval letters</li>
+          <li>Create doctor accounts</li>
+          <li>Final authorization</li>
+        </ul>
       </div>
     </section>
 
     <div id="login-modal" class="modal hidden" aria-hidden="true">
       <div class="modal-backdrop" id="modal-backdrop"></div>
       <div class="modal-card card">
-        <div class="split" style="align-items:flex-start">
+        <div class="split" style="align-items: flex-start; margin-bottom: 24px;">
           <div>
-            <h2>Role Login</h2>
-            <p class="muted">Choose your role and login.</p>
+            <h2 style="margin: 0;">🔐 Role Login</h2>
+            <p class="muted" style="margin: 4px 0 0;">Choose your role and login securely</p>
           </div>
-          <button id="close-login" class="secondary" style="width:auto; padding:8px 10px;">Close</button>
+          <button id="close-login" class="secondary" style="width: auto; padding: 10px 16px; margin: 0;">
+            ✕ Close
+          </button>
         </div>
 
-        <label>Role</label>
-        <select id="role-select">
-          <option value="migrant">Migrant</option>
-          <option value="doctor">Doctor</option>
-          <option value="official">Government Official</option>
+        <label>Select Role</label>
+        <select id="role-select" style="margin-bottom: 8px;">
+          <option value="migrant">👤 Migrant</option>
+          <option value="doctor">🩺 Doctor</option>
+          <option value="official">🏛️ Government Official</option>
         </select>
 
-        <form id="role-form" style="margin-top:8px;" enctype="multipart/form-data">
+        <form id="role-form" style="margin-top: 16px;" enctype="multipart/form-data">
           <div id="role-fields"></div>
-          <button type="submit">Login</button>
+          <button type="submit" class="primary">Login</button>
         </form>
 
-        <div id="role-message" class="toast"></div>
+        <div id="role-message" class="toast" style="margin-top: 16px;"></div>
       </div>
     </div>
   </div>

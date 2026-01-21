@@ -115,7 +115,6 @@ def download_clearance():
 
 
 @migrant_bp.route("/logout", methods=["POST"])
-@require_role("migrant")
 def logout():
     session.clear()
     return jsonify({"message": "Logged out"})

@@ -3,20 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doctor Dashboard</title>
+  <title>Doctor Dashboard | Aarogya Check</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="layout">
     <header class="split">
       <div>
-        <h1>Doctor Dashboard</h1>
-        <p>Review applications with full medical details.</p>
+        <h1>🩺 Doctor Dashboard</h1>
+        <p>Review applications with full medical details and sensitive information</p>
       </div>
-      <button id="logout-btn" class="secondary">Logout</button>
+      <button id="logout-btn" class="secondary" style="width: auto; padding: 12px 24px; margin: 0;">
+        🚪 Logout
+      </button>
     </header>
+    
+    <section class="card" style="margin-bottom: 32px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);">
+      <h2>📋 Medical Review Panel</h2>
+      <p class="muted" style="line-height: 1.8;">
+        You have full access to sensitive medical data. Click on any card to expand details. 
+        Review medical reports and make approval decisions based on health assessments.
+      </p>
+    </section>
+    
     <section id="doctor-cards" class="grid grid-3"></section>
-    <div id="doctor-message" class="toast"></div>
+    <div id="doctor-message" class="toast" style="margin-top: 24px;"></div>
   </div>
   <script src="/static/doctor.js"></script>
 </body>

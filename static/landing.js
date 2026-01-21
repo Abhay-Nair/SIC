@@ -11,101 +11,134 @@ function showModal() {
   modal.classList.remove("hidden");
   modal.setAttribute("aria-hidden", "false");
   renderRoleFields(roleSelect.value);
+  document.body.style.overflow = "hidden";
 }
 
 function hideModal() {
   modal.classList.add("hidden");
   modal.setAttribute("aria-hidden", "true");
   roleMessage.textContent = "";
-  roleMessage.classList.remove("error");
+  roleMessage.classList.remove("error", "success");
+  roleForm.reset();
+  document.body.style.overflow = "";
 }
 
-openBtn.addEventListener("click", showModal);
-closeBtn.addEventListener("click", hideModal);
-backdrop.addEventListener("click", hideModal);
+openBtn?.addEventListener("click", showModal);
+closeBtn?.addEventListener("click", hideModal);
+backdrop?.addEventListener("click", hideModal);
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") hideModal();
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) hideModal();
 });
 
-roleSelect.addEventListener("change", () => renderRoleFields(roleSelect.value));
+roleSelect?.addEventListener("change", () => {
+  renderRoleFields(roleSelect.value);
+  roleMessage.textContent = "";
+});
 
 function renderRoleFields(role) {
   if (role === "migrant") {
     roleFields.innerHTML = `
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Aadhar</label>
-      <input type="text" name="aadhar" required>
-      <p class="muted" style="margin:8px 0 0;">New applicant? Use “Apply Here”.</p>
+      <label>📧 Email</label>
+      <input type="email" name="email" required placeholder="your.email@example.com">
+      <label>🆔 Aadhar</label>
+      <input type="text" name="aadhar" required placeholder="12-digit Aadhar number">
+      <p class="muted" style="margin:12px 0 0; font-size:0.85rem;">New applicant? Use "Apply Here" button above.</p>
     `;
     return;
   }
   if (role === "doctor") {
     roleFields.innerHTML = `
-      <label>Doctor ID</label>
-      <input type="text" name="doctor_id" required>
-      <label>Password</label>
-      <input type="password" name="password" required>
-      <label>Verification Card (PDF/Image)</label>
+      <label>👨‍⚕️ Doctor ID</label>
+      <input type="text" name="doctor_id" required placeholder="e.g., 0010">
+      <label>🔒 Password</label>
+      <input type="password" name="password" required placeholder="Enter your password">
+      <label>📄 Verification Card (PDF/Image)</label>
       <input type="file" name="verification_card" accept=".pdf,.png,.jpg,.jpeg" required>
+      <p class="muted" style="margin:8px 0 0; font-size:0.85rem;">Upload your medical license or ID card</p>
     `;
     return;
   }
   roleFields.innerHTML = `
-    <label>Official ID</label>
-    <input type="text" name="official_id" required>
-    <label>Password</label>
-    <input type="password" name="password" required>
-    <label>Verification Card (PDF/Image)</label>
+    <label>🏛️ Official ID</label>
+    <input type="text" name="official_id" required placeholder="e.g., 0010">
+    <label>🔒 Password</label>
+    <input type="password" name="password" required placeholder="Enter your password">
+    <label>📄 Verification Card (PDF/Image)</label>
     <input type="file" name="verification_card" accept=".pdf,.png,.jpg,.jpeg" required>
+    <p class="muted" style="margin:8px 0 0; font-size:0.85rem;">Upload your government ID or authorization letter</p>
   `;
 }
 
-roleForm.addEventListener("submit", async (e) => {
+roleForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   roleMessage.textContent = "";
-  roleMessage.classList.remove("error");
+  roleMessage.classList.remove("error", "success");
+
+  const submitBtn = roleForm.querySelector('button[type="submit"]');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="loading"></span> Logging in...';
 
   const role = roleSelect.value;
   const formData = new FormData(roleForm);
 
   let url = "";
   let redirect = "";
-  if (role === "migrant") {
-    url = "/migrant/login";
-    redirect = "/migrant-dashboard";
-    // Migrant login uses JSON (no file)
-    const payload = Object.fromEntries(formData.entries());
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+  
+  try {
+    if (role === "migrant") {
+      url = "/migrant/login";
+      redirect = "/migrant-dashboard";
+      const payload = Object.fromEntries(formData.entries());
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        roleMessage.textContent = data.error || "Login failed";
+        roleMessage.classList.add("error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        return;
+      }
+      roleMessage.textContent = "✓ Login successful! Redirecting...";
+      roleMessage.classList.add("success");
+      setTimeout(() => window.location.href = redirect, 800);
+      return;
+    } else if (role === "doctor") {
+      url = "/doctor/login";
+      redirect = "/doctor-dashboard";
+    } else {
+      url = "/official/login";
+      redirect = "/official-dashboard";
+    }
+
+    const res = await fetch(url, { method: "POST", body: formData });
     const data = await res.json();
     if (!res.ok) {
       roleMessage.textContent = data.error || "Login failed";
       roleMessage.classList.add("error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
       return;
     }
-    roleMessage.textContent = "Login successful. Redirecting...";
-    window.location.href = redirect;
-    return;
-  } else if (role === "doctor") {
-    url = "/doctor/login";
-    redirect = "/doctor-dashboard";
-  } else {
-    url = "/official/login";
-    redirect = "/official-dashboard";
-  }
-
-  const res = await fetch(url, { method: "POST", body: formData });
-  const data = await res.json();
-  if (!res.ok) {
-    roleMessage.textContent = data.error || "Login failed";
+    roleMessage.textContent = "✓ Login successful! Redirecting...";
+    roleMessage.classList.add("success");
+    setTimeout(() => window.location.href = redirect, 800);
+  } catch (err) {
+    roleMessage.textContent = "Network error. Please try again.";
     roleMessage.classList.add("error");
-    return;
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
   }
-  roleMessage.textContent = "Login successful. Redirecting...";
-  window.location.href = redirect;
 });
 
+// Add entrance animations
+document.addEventListener("DOMContentLoaded", () => {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1}s`;
+  });
+});
