@@ -10,21 +10,17 @@ doctor_bp = Blueprint("doctor", __name__)
 
 @doctor_bp.route("/login", methods=["POST"])
 def login():
-    doctor_id = request.form.get("doctor_id")
-    password = request.form.get("password")
-    verification_file = request.files.get("verification_card")
+    # Support both JSON and form data
+    if request.is_json:
+        data = request.get_json() or {}
+        doctor_id = data.get("doctor_id")
+        password = data.get("password")
+    else:
+        doctor_id = request.form.get("doctor_id")
+        password = request.form.get("password")
 
-    if not verification_file or verification_file.filename == "":
-        return jsonify({"error": "Verification card is required"}), 400
-    if not allowed_file(verification_file.filename, Config.ALLOWED_VERIFICATION_EXTENSIONS):
-        return jsonify({"error": "Invalid verification card format"}), 400
-    filename = f"{uuid.uuid4().hex}_{verification_file.filename}"
-    filepath = f"{Config.DOCTOR_VERIFICATION_FOLDER}/{filename}"
-    verification_file.save(filepath)
-
-    ok, reason = verify_card(filepath)
-    if not ok:
-        return jsonify({"error": f"Verification failed: {reason}"}), 401
+    if not doctor_id or not password:
+        return jsonify({"error": "Doctor ID and password required"}), 400
 
     # Check DB-backed doctor accounts first
     account = current_app.officials_db.doctor_accounts.find_one({"doctor_id": doctor_id})
@@ -42,7 +38,13 @@ def login():
 @doctor_bp.route("/migrants", methods=["GET"])
 @require_role("doctor")
 def list_migrants():
-    docs = current_app.immigrants_db.immigrants.find()
+    aadhar_search = request.args.get("aadhar", "").strip()
+    query = {}
+    if aadhar_search:
+        query["aadhar"] = {"$regex": aadhar_search, "$options": "i"}
+    # Only show PENDING applications
+    query["doctor_approval"] = "PENDING"
+    docs = current_app.immigrants_db.immigrants.find(query)
     migrants = [serialize_migrant(doc, include_sensitive=True) for doc in docs]
     return jsonify({"migrants": migrants})
 

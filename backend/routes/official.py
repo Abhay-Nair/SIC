@@ -10,21 +10,17 @@ official_bp = Blueprint("official", __name__)
 
 @official_bp.route("/login", methods=["POST"])
 def login():
-    official_id = request.form.get("official_id")
-    password = request.form.get("password")
-    verification_file = request.files.get("verification_card")
+    # Support both JSON and form data
+    if request.is_json:
+        data = request.get_json() or {}
+        official_id = data.get("official_id")
+        password = data.get("password")
+    else:
+        official_id = request.form.get("official_id")
+        password = request.form.get("password")
 
-    if not verification_file or verification_file.filename == "":
-        return jsonify({"error": "Verification card is required"}), 400
-    if not allowed_file(verification_file.filename, Config.ALLOWED_VERIFICATION_EXTENSIONS):
-        return jsonify({"error": "Invalid verification card format"}), 400
-    filename = f"{uuid.uuid4().hex}_{verification_file.filename}"
-    filepath = f"{Config.OFFICIAL_VERIFICATION_FOLDER}/{filename}"
-    verification_file.save(filepath)
-
-    ok, reason = verify_card(filepath)
-    if not ok:
-        return jsonify({"error": f"Verification failed: {reason}"}), 401
+    if not official_id or not password:
+        return jsonify({"error": "Official ID and password required"}), 400
 
     if Config.OFFICIAL_ACCOUNTS.get(official_id) != password:
         return jsonify({"error": "Invalid credentials"}), 401

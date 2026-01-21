@@ -1,15 +1,35 @@
 const container = document.getElementById("doctor-cards");
 const toast = document.getElementById("doctor-message");
+const searchInput = document.getElementById("aadhar-search");
+const clearBtn = document.getElementById("clear-search");
 let expandedCard = null;
+let allMigrants = [];
 
 document.getElementById("logout-btn")?.addEventListener("click", async () => {
   await fetch("/doctor/logout", { method: "POST" });
   window.location.href = "/";
 });
 
+searchInput?.addEventListener("input", () => {
+  const searchTerm = searchInput.value.trim();
+  if (searchTerm) {
+    const filtered = allMigrants.filter(m => m.aadhar.includes(searchTerm));
+    renderCards(filtered);
+  } else {
+    renderCards(allMigrants);
+  }
+});
+
+clearBtn?.addEventListener("click", () => {
+  searchInput.value = "";
+  renderCards(allMigrants);
+});
+
 async function fetchMigrants() {
   try {
-    const res = await fetch("/doctor/migrants");
+    const searchTerm = searchInput?.value.trim() || "";
+    const url = searchTerm ? `/doctor/migrants?aadhar=${encodeURIComponent(searchTerm)}` : "/doctor/migrants";
+    const res = await fetch(url);
     const data = await res.json();
     if (!res.ok) {
       toast.textContent = "✗ " + (data.error || "Failed to load migrants");
@@ -17,7 +37,8 @@ async function fetchMigrants() {
       toast.classList.remove("success");
       return;
     }
-    renderCards(data.migrants || []);
+    allMigrants = data.migrants || [];
+    renderCards(allMigrants);
   } catch (err) {
     toast.textContent = "✗ Network error. Please refresh.";
     toast.classList.add("error");

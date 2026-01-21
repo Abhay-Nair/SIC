@@ -18,12 +18,17 @@
       </button>
     </header>
     
-    <section class="card" style="margin-bottom: 32px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 255, 136, 0.1) 100%);">
+    <section class="card" style="margin-bottom: 24px;">
       <h2>📋 Medical Review Panel</h2>
-      <p class="muted" style="line-height: 1.8;">
+      <p class="muted" style="line-height: 1.8; margin-bottom: 16px;">
         You have full access to sensitive medical data. Click on any card to expand details. 
         Review medical reports and make approval decisions based on health assessments.
       </p>
+      <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+        <label style="margin: 0; font-size: 0.9rem;">🔍 Search by Aadhar:</label>
+        <input type="text" id="aadhar-search" placeholder="Enter Aadhar number" style="flex: 1; min-width: 200px; max-width: 300px; margin: 0;">
+        <button id="clear-search" class="secondary" style="margin: 0; width: auto; padding: 10px 16px;">Clear</button>
+      </div>
     </section>
     
     <section id="doctor-cards" class="grid grid-3"></section>

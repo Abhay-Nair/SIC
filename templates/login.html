@@ -26,25 +26,21 @@
       </section>
       <section class="card">
         <h2>Doctor Login</h2>
-        <form id="doctor-login" enctype="multipart/form-data">
+        <form id="doctor-login">
           <label>Doctor ID</label>
           <input type="text" name="doctor_id" required>
           <label>Password</label>
           <input type="password" name="password" required>
-          <label>Verification Card (PDF/Image)</label>
-          <input type="file" name="verification_card" required>
           <button type="submit">Login</button>
         </form>
       </section>
       <section class="card">
         <h2>Official Login</h2>
-        <form id="official-login" enctype="multipart/form-data">
+        <form id="official-login">
           <label>Official ID</label>
           <input type="text" name="official_id" required>
           <label>Password</label>
           <input type="password" name="password" required>
-          <label>Verification Card (PDF/Image)</label>
-          <input type="file" name="verification_card" required>
           <button type="submit">Login</button>
         </form>
       </section>
@@ -81,8 +77,8 @@
       });
     }
     handleLogin("migrant-login", "/migrant/login", "/migrant-dashboard");
-    handleLogin("doctor-login", "/doctor/login", "/doctor-dashboard", true);
-    handleLogin("official-login", "/official/login", "/official-dashboard", true);
+    handleLogin("doctor-login", "/doctor/login", "/doctor-dashboard");
+    handleLogin("official-login", "/official/login", "/official-dashboard");
   </script>
 </body>
 </html>

@@ -52,9 +52,6 @@ function renderRoleFields(role) {
       <input type="text" name="doctor_id" required placeholder="e.g., 0010">
       <label>🔒 Password</label>
       <input type="password" name="password" required placeholder="Enter your password">
-      <label>📄 Verification Card (PDF/Image)</label>
-      <input type="file" name="verification_card" accept=".pdf,.png,.jpg,.jpeg" required>
-      <p class="muted" style="margin:8px 0 0; font-size:0.85rem;">Upload your medical license or ID card</p>
     `;
     return;
   }
@@ -63,9 +60,6 @@ function renderRoleFields(role) {
     <input type="text" name="official_id" required placeholder="e.g., 0010">
     <label>🔒 Password</label>
     <input type="password" name="password" required placeholder="Enter your password">
-    <label>📄 Verification Card (PDF/Image)</label>
-    <input type="file" name="verification_card" accept=".pdf,.png,.jpg,.jpeg" required>
-    <p class="muted" style="margin:8px 0 0; font-size:0.85rem;">Upload your government ID or authorization letter</p>
   `;
 }
 
@@ -110,9 +104,47 @@ roleForm?.addEventListener("submit", async (e) => {
     } else if (role === "doctor") {
       url = "/doctor/login";
       redirect = "/doctor-dashboard";
+      // Doctor login uses JSON (no file)
+      const payload = Object.fromEntries(formData.entries());
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        roleMessage.textContent = data.error || "Login failed";
+        roleMessage.classList.add("error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        return;
+      }
+      roleMessage.textContent = "✓ Login successful! Redirecting...";
+      roleMessage.classList.add("success");
+      setTimeout(() => window.location.href = redirect, 800);
+      return;
     } else {
       url = "/official/login";
       redirect = "/official-dashboard";
+      // Official login uses JSON (no file)
+      const payload = Object.fromEntries(formData.entries());
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        roleMessage.textContent = data.error || "Login failed";
+        roleMessage.classList.add("error");
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+        return;
+      }
+      roleMessage.textContent = "✓ Login successful! Redirecting...";
+      roleMessage.classList.add("success");
+      setTimeout(() => window.location.href = redirect, 800);
+      return;
     }
 
     const res = await fetch(url, { method: "POST", body: formData });

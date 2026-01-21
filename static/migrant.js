@@ -18,6 +18,16 @@ async function startFreshIfRequested() {
 
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  
+  // Validate Aadhar
+  const aadharInput = form.querySelector('input[name="aadhar"]');
+  const aadhar = aadharInput.value.trim();
+  if (!/^\d{12}$/.test(aadhar)) {
+    applyMessage.textContent = "✗ Aadhar must be exactly 12 digits (numbers only)";
+    applyMessage.classList.add("error");
+    return;
+  }
+  
   const submitBtn = form.querySelector('button[type="submit"]');
   const originalText = submitBtn.textContent;
   submitBtn.disabled = true;

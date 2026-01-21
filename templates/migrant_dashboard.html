@@ -31,29 +31,65 @@
           </div>
           <div>
             <label>🆔 Aadhar Number</label>
-            <input type="text" name="aadhar" required placeholder="12-digit Aadhar number">
+            <input type="text" name="aadhar" required placeholder="12-digit Aadhar number" maxlength="12" pattern="[0-9]{12}">
+            <p class="muted" style="margin-top: 4px; font-size: 0.75rem;">Only numbers, exactly 12 digits</p>
           </div>
           <div>
             <label>📍 Source Location</label>
-            <input type="text" name="source" required placeholder="City/State you're traveling from">
+            <select name="source" required>
+              <option value="">Select source</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Pune">Pune</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Aurangabad">Aurangabad</option>
+              <option value="Solapur">Solapur</option>
+              <option value="Thane">Thane</option>
+              <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+              <option value="Kalyan-Dombivli">Kalyan-Dombivli</option>
+              <option value="Vasai-Virar">Vasai-Virar</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div>
             <label>🎯 Destination</label>
-            <input type="text" name="destination" required placeholder="City/State you're traveling to">
+            <select name="destination" required>
+              <option value="">Select destination</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Pune">Pune</option>
+              <option value="Nagpur">Nagpur</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Aurangabad">Aurangabad</option>
+              <option value="Solapur">Solapur</option>
+              <option value="Thane">Thane</option>
+              <option value="Pimpri-Chinchwad">Pimpri-Chinchwad</option>
+              <option value="Kalyan-Dombivli">Kalyan-Dombivli</option>
+              <option value="Vasai-Virar">Vasai-Virar</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div>
             <label>🚗 Medium of Travel</label>
-            <input type="text" name="medium_of_travel" required placeholder="e.g., Bus, Train, Flight">
+            <select name="medium_of_travel" required>
+              <option value="">Select medium</option>
+              <option value="Bus">Bus</option>
+              <option value="Train">Train</option>
+              <option value="Flight">Flight</option>
+              <option value="Car">Car</option>
+              <option value="Taxi">Taxi</option>
+              <option value="Auto-rickshaw">Auto-rickshaw</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
           <div>
             <label>📧 Email Address</label>
             <input type="email" name="email" required placeholder="your.email@example.com">
           </div>
         </div>
-        <label>📄 Medical Report (PDF/Image)</label>
-        <input type="file" name="medical_report" accept=".pdf,.png,.jpg,.jpeg" required>
+        <label>📄 Medical Report (PDF/Image) - Optional</label>
+        <input type="file" name="medical_report" accept=".pdf,.png,.jpg,.jpeg">
         <p class="muted" style="margin-top: 8px; font-size: 0.85rem;">
-          Upload a clear scan or photo of your medical report (Max 5MB)
+          Optional: Upload a clear scan or photo of your medical report (Max 5MB)
         </p>
         <button type="submit" class="primary">📤 Submit / Update Application</button>
       </form>
