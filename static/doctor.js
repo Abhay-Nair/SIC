@@ -110,11 +110,14 @@ function renderCards(list) {
         e.stopPropagation();
         if (btn.disabled) return;
         const decision = btn.dataset.d;
-        const confirmMsg = decision === "APPROVED" 
-          ? `Approve ${m.name}'s medical clearance?`
-          : `Reject ${m.name}'s medical clearance?`;
-        if (!confirm(confirmMsg)) return;
-        await decide(btn.dataset.id, decision);
+        if (decision === "APPROVED") {
+          const confirmMsg = `Approve ${m.name}'s medical clearance?`;
+          if (!confirm(confirmMsg)) return;
+          await decide(btn.dataset.id, decision);
+        } else if (decision === "REJECTED") {
+          // Show health form modal for rejection
+          showHealthForm(m, btn.dataset.id);
+        }
       });
     });
     
@@ -122,7 +125,95 @@ function renderCards(list) {
   });
 }
 
-async function decide(id, decision) {
+function showHealthForm(migrant, migrantId) {
+  // Create modal
+  const modal = document.createElement("div");
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7); z-index: 10000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: white; border-radius: 12px; padding: 30px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto;">
+      <h2 style="margin-bottom: 20px;">🏥 Health Form - Disapproved Traveler</h2>
+      <p class="muted" style="margin-bottom: 20px;">Please fill in the health information for ${migrant.name}</p>
+      <form id="health-form" style="display: grid; gap: 16px;">
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Name</label>
+          <input type="text" name="name" value="${migrant.name}" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Age</label>
+          <input type="number" name="age" required min="1" max="120" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Current Address</label>
+          <textarea name="current_address" required rows="3" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; resize: vertical;"></textarea>
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Email ID</label>
+          <input type="email" name="email" value="${migrant.email}" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Phone Number</label>
+          <input type="tel" name="phone_number" required pattern="[0-9]{10}" placeholder="10-digit phone number" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Disease Name</label>
+          <input type="text" name="disease_name" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Tier</label>
+          <select name="tier" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <option value="">Select Tier</option>
+            <option value="1">Tier 1</option>
+            <option value="2">Tier 2</option>
+            <option value="3">Tier 3</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; margin-bottom: 6px; font-weight: 600;">Expected Recovery Date</label>
+          <input type="date" name="expected_recovery_date" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+          <button type="submit" class="danger" style="flex: 1; padding: 12px;">Submit & Reject</button>
+          <button type="button" id="cancel-health-form" class="secondary" style="flex: 1; padding: 12px;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  const form = modal.querySelector("#health-form");
+  const cancelBtn = modal.querySelector("#cancel-health-form");
+  
+  cancelBtn.addEventListener("click", () => {
+    document.body.removeChild(modal);
+  });
+  
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const healthData = {
+      name: formData.get("name"),
+      age: formData.get("age"),
+      current_address: formData.get("current_address"),
+      email: formData.get("email"),
+      phone_number: formData.get("phone_number"),
+      disease_name: formData.get("disease_name"),
+      tier: formData.get("tier"),
+      expected_recovery_date: formData.get("expected_recovery_date"),
+    };
+    
+    document.body.removeChild(modal);
+    await decide(migrantId, "REJECTED", healthData);
+  });
+}
+
+async function decide(id, decision, healthData = null) {
   const btn = container.querySelector(`button[data-id="${id}"][data-d="${decision}"]`);
   if (!btn) return;
   
@@ -131,10 +222,15 @@ async function decide(id, decision) {
   btn.innerHTML = '<span class="loading"></span> Processing...';
   
   try {
+    const payload = { decision };
+    if (healthData) {
+      payload.health_data = healthData;
+    }
+    
     const res = await fetch(`/doctor/decision/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ decision }),
+      body: JSON.stringify(payload),
     });
     const data = await res.json();
     

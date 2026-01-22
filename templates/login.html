@@ -12,7 +12,7 @@
       <h1>Aarogya Check</h1>
       <p>Secure, role-based approvals for migrant travel.</p>
     </header>
-    <main class="grid grid-3">
+    <main class="grid grid-3" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
       <section class="card">
         <h2>Migrant Login</h2>
         <form id="migrant-login">
@@ -43,6 +43,28 @@
           <input type="password" name="password" required>
           <button type="submit">Login</button>
         </form>
+      </section>
+      <section class="card">
+        <h2>🏥 Health Admin Login</h2>
+        <form id="health-admin-login">
+          <label>Admin ID</label>
+          <input type="text" name="admin_id" required>
+          <label>Password</label>
+          <input type="password" name="password" required>
+          <button type="submit">Login</button>
+        </form>
+        <p class="hint" style="font-size: 0.85rem; margin-top: 8px;">Default: HEALTH_ADMIN / admin123</p>
+      </section>
+      <section class="card">
+        <h2>🚨 Authorities Login</h2>
+        <form id="authorities-login">
+          <label>Authority ID</label>
+          <input type="text" name="authority_id" required>
+          <label>Password</label>
+          <input type="password" name="password" required>
+          <button type="submit">Login</button>
+        </form>
+        <p class="hint" style="font-size: 0.85rem; margin-top: 8px;">Default: AUTHORITY / authority123</p>
       </section>
     </main>
     <div id="login-message" class="toast"></div>
@@ -79,6 +101,8 @@
     handleLogin("migrant-login", "/migrant/login", "/migrant-dashboard");
     handleLogin("doctor-login", "/doctor/login", "/doctor-dashboard");
     handleLogin("official-login", "/official/login", "/official-dashboard");
+    handleLogin("health-admin-login", "/health-admin/login", "/health-admin-dashboard");
+    handleLogin("authorities-login", "/authorities/login", "/authorities-dashboard");
   </script>
 </body>
 </html>

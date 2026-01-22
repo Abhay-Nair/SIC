@@ -55,12 +55,36 @@ function renderRoleFields(role) {
     `;
     return;
   }
-  roleFields.innerHTML = `
-    <label>🏛️ Official ID</label>
-    <input type="text" name="official_id" required placeholder="e.g., 0010">
-    <label>🔒 Password</label>
-    <input type="password" name="password" required placeholder="Enter your password">
-  `;
+  if (role === "official") {
+    roleFields.innerHTML = `
+      <label>🏛️ Official ID</label>
+      <input type="text" name="official_id" required placeholder="e.g., 0010">
+      <label>🔒 Password</label>
+      <input type="password" name="password" required placeholder="Enter your password">
+    `;
+    return;
+  }
+  if (role === "health_admin") {
+    roleFields.innerHTML = `
+      <label>🏥 Admin ID</label>
+      <input type="text" name="admin_id" required placeholder="e.g., HEALTH_ADMIN">
+      <label>🔒 Password</label>
+      <input type="password" name="password" required placeholder="Enter your password">
+      <p class="muted" style="margin:12px 0 0; font-size:0.85rem;">Default: HEALTH_ADMIN / admin123</p>
+    `;
+    return;
+  }
+  if (role === "authorities") {
+    roleFields.innerHTML = `
+      <label>🚨 Authority ID</label>
+      <input type="text" name="authority_id" required placeholder="e.g., AUTHORITY">
+      <label>🔒 Password</label>
+      <input type="password" name="password" required placeholder="Enter your password">
+      <p class="muted" style="margin:12px 0 0; font-size:0.85rem;">Default: AUTHORITY / authority123</p>
+    `;
+    return;
+  }
+  roleFields.innerHTML = ``;
 }
 
 roleForm?.addEventListener("submit", async (e) => {
@@ -76,79 +100,41 @@ roleForm?.addEventListener("submit", async (e) => {
   const role = roleSelect.value;
   const formData = new FormData(roleForm);
 
-  let url = "";
-  let redirect = "";
-  
   try {
+    let url = "";
+    let redirect = "";
+    const payload = Object.fromEntries(formData.entries());
+    
     if (role === "migrant") {
       url = "/migrant/login";
       redirect = "/migrant-dashboard";
-      const payload = Object.fromEntries(formData.entries());
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        roleMessage.textContent = data.error || "Login failed";
-        roleMessage.classList.add("error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-        return;
-      }
-      roleMessage.textContent = "✓ Login successful! Redirecting...";
-      roleMessage.classList.add("success");
-      setTimeout(() => window.location.href = redirect, 800);
-      return;
     } else if (role === "doctor") {
       url = "/doctor/login";
       redirect = "/doctor-dashboard";
-      // Doctor login uses JSON (no file)
-      const payload = Object.fromEntries(formData.entries());
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        roleMessage.textContent = data.error || "Login failed";
-        roleMessage.classList.add("error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-        return;
-      }
-      roleMessage.textContent = "✓ Login successful! Redirecting...";
-      roleMessage.classList.add("success");
-      setTimeout(() => window.location.href = redirect, 800);
-      return;
-    } else {
+    } else if (role === "official") {
       url = "/official/login";
       redirect = "/official-dashboard";
-      // Official login uses JSON (no file)
-      const payload = Object.fromEntries(formData.entries());
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        roleMessage.textContent = data.error || "Login failed";
-        roleMessage.classList.add("error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
-        return;
-      }
-      roleMessage.textContent = "✓ Login successful! Redirecting...";
-      roleMessage.classList.add("success");
-      setTimeout(() => window.location.href = redirect, 800);
+    } else if (role === "health_admin") {
+      url = "/health-admin/login";
+      redirect = "/health-admin-dashboard";
+    } else if (role === "authorities") {
+      url = "/authorities/login";
+      redirect = "/authorities-dashboard";
+    } else {
+      roleMessage.textContent = "Invalid role selected";
+      roleMessage.classList.add("error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
       return;
     }
-
-    const res = await fetch(url, { method: "POST", body: formData });
+    
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     const data = await res.json();
+    
     if (!res.ok) {
       roleMessage.textContent = data.error || "Login failed";
       roleMessage.classList.add("error");
@@ -156,6 +142,7 @@ roleForm?.addEventListener("submit", async (e) => {
       submitBtn.textContent = originalText;
       return;
     }
+    
     roleMessage.textContent = "✓ Login successful! Redirecting...";
     roleMessage.classList.add("success");
     setTimeout(() => window.location.href = redirect, 800);

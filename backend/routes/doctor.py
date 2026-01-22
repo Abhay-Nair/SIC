@@ -74,6 +74,28 @@ def decide(migrant_id):
         {"$set": {"doctor_approval": decision, "doctor_id": session.get("doctor_id")}},
     )
     if decision == "REJECTED":
+        # Check if health form data is provided
+        health_data = data.get("health_data")
+        if health_data:
+            # Save health information for disapproved traveler
+            from models import now_iso
+            health_info = {
+                "migrant_id": str(doc["_id"]),
+                "name": health_data.get("name", doc.get("name")),
+                "age": health_data.get("age"),
+                "current_address": health_data.get("current_address"),
+                "email": health_data.get("email", doc.get("email")),
+                "phone_number": health_data.get("phone_number"),
+                "aadhar": doc.get("aadhar"),
+                "disease_name": health_data.get("disease_name"),
+                "tier": int(health_data.get("tier", 1)),
+                "expected_recovery_date": health_data.get("expected_recovery_date"),
+                "doctor_id": session.get("doctor_id"),
+                "created_at": now_iso(),
+                "qr_generated": False,
+            }
+            current_app.officials_db.disapproved_travelers.insert_one(health_info)
+        
         body = (
             f"Dear {doc.get('name')},\n\n"
             "Your application has been rejected by the medical reviewer.\n"

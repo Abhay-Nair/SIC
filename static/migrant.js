@@ -130,6 +130,61 @@ async function loadStatus() {
       downloadBtn.classList.remove("primary");
       downloadBtn.style.background = "";
     }
+    
+    // Show health warning letter button if disapproved
+    let healthWarningBtn = document.getElementById("download-health-warning");
+    if (!healthWarningBtn) {
+      healthWarningBtn = document.createElement("button");
+      healthWarningBtn.id = "download-health-warning";
+      healthWarningBtn.className = "danger";
+      healthWarningBtn.style.cssText = "margin-top: 20px; padding: 12px; font-size: 16px;";
+      healthWarningBtn.textContent = "⚠️ Download Health Warning Letter";
+      downloadBtn.parentElement.appendChild(healthWarningBtn);
+      
+      healthWarningBtn.addEventListener("click", async () => {
+        healthWarningBtn.disabled = true;
+        healthWarningBtn.innerHTML = '<span class="loading"></span> Generating PDF...';
+        
+        try {
+          const res = await fetch("/migrant/download-health-warning");
+          if (!res.ok) {
+            const data = await res.json();
+            applyMessage.textContent = "✗ " + (data.error || "Cannot download yet");
+            applyMessage.classList.add("error");
+            healthWarningBtn.disabled = false;
+            healthWarningBtn.textContent = "⚠️ Download Health Warning Letter";
+            return;
+          }
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `health_warning_${new Date().getTime()}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          
+          applyMessage.textContent = "✓ Health warning letter downloaded successfully!";
+          applyMessage.classList.remove("error");
+          applyMessage.classList.add("success");
+          healthWarningBtn.disabled = false;
+          healthWarningBtn.textContent = "⚠️ Download Health Warning Letter";
+        } catch (err) {
+          applyMessage.textContent = "✗ Download failed. Please try again.";
+          applyMessage.classList.add("error");
+          healthWarningBtn.disabled = false;
+          healthWarningBtn.textContent = "⚠️ Download Health Warning Letter";
+        }
+      });
+    }
+    
+    // Show/hide health warning button based on status
+    if (m.has_health_warning && m.doctor_approval === "REJECTED") {
+      healthWarningBtn.style.display = "block";
+    } else {
+      healthWarningBtn.style.display = "none";
+    }
   } catch (err) {
     statusPanel.innerHTML = `<p class="muted">Failed to load status. Please refresh.</p>`;
   }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Authorities | Aarogya Check</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header class="split">
+      <div>
+        <h1>🚨 Government Authorities</h1>
+        <p>Scan QR codes and verify traveler health status at Railways and Airports</p>
+      </div>
+      <button id="logout-btn" class="secondary" style="width: auto; padding: 12px 24px; margin: 0;">
+        🚪 Logout
+      </button>
+    </header>
+    
+    <section class="card" style="margin-bottom: 24px;">
+      <h2>📱 QR Code Scanner</h2>
+      <p class="muted" style="line-height: 1.8; margin-bottom: 16px;">
+        Scan QR codes from traveler health certificates. The system will automatically detect if a traveler is approved or disapproved.
+      </p>
+      <div style="display: grid; gap: 16px;">
+        <div>
+          <label style="display: block; margin-bottom: 8px; font-weight: 600;">QR Code Data (Paste or enter QR content)</label>
+          <textarea id="qr-input" rows="4" placeholder='Paste QR code JSON data here or scan QR code...' style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-family: monospace; font-size: 14px;"></textarea>
+        </div>
+        <button id="scan-btn" class="primary" style="padding: 14px; font-size: 16px;">
+          🔍 Scan QR Code
+        </button>
+      </div>
+    </section>
+    
+    <section id="scan-result" style="display: none;" class="card" style="margin-bottom: 24px;"></section>
+    
+    <section class="card" style="margin-bottom: 24px;">
+      <h2>📋 Disapproved Travelers Database</h2>
+      <p class="muted" style="line-height: 1.8; margin-bottom: 16px;">
+        List of all disapproved travelers (Name, Aadhar, Tier) for reference.
+      </p>
+    </section>
+    
+    <section id="travelers-list" class="grid grid-3"></section>
+    <div id="authorities-message" class="toast" style="margin-top: 24px;"></div>
+  </div>
+  <script src="/static/authorities.js"></script>
+</body>
+</html>

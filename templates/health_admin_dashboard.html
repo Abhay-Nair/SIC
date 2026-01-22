@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Health Administration | Aarogya Check</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="layout">
+    <header class="split">
+      <div>
+        <h1>🏥 Government Health Administration</h1>
+        <p>Manage disapproved travelers and issue health warning notices</p>
+      </div>
+      <button id="logout-btn" class="secondary" style="width: auto; padding: 12px 24px; margin: 0;">
+        🚪 Logout
+      </button>
+    </header>
+    
+    <section class="card" style="margin-bottom: 24px;">
+      <h2>📋 Disapproved Travelers</h2>
+      <p class="muted" style="line-height: 1.8; margin-bottom: 16px;">
+        View all travelers who have been disapproved by doctors. Click on a traveler to view full details and issue health warning notice with QR code.
+      </p>
+    </section>
+    
+    <section id="travelers-list" class="grid grid-3"></section>
+    <div id="health-admin-message" class="toast" style="margin-top: 24px;"></div>
+    
+    <!-- Traveler Details Modal -->
+    <div id="traveler-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+      <div style="background: white; border-radius: 12px; padding: 30px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2>👤 Traveler Details</h2>
+          <button id="close-modal" style="background: #f44336; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">✕ Close</button>
+        </div>
+        <div id="traveler-details-content"></div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/health_admin.js"></script>
+</body>
+</html>

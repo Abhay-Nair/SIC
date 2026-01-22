@@ -4,6 +4,8 @@ from config import Config, get_mongo_client, ensure_folders
 from routes.migrant import migrant_bp
 from routes.doctor import doctor_bp
 from routes.official import official_bp
+from routes.health_admin import health_admin_bp
+from routes.authorities import authorities_bp
 from models import require_role, seed_doctors
 
 
@@ -21,6 +23,8 @@ def create_app():
     app.register_blueprint(migrant_bp, url_prefix="/migrant")
     app.register_blueprint(doctor_bp, url_prefix="/doctor")
     app.register_blueprint(official_bp, url_prefix="/official")
+    app.register_blueprint(health_admin_bp, url_prefix="/health-admin")
+    app.register_blueprint(authorities_bp, url_prefix="/authorities")
 
     @app.route("/")
     def index():
@@ -43,6 +47,16 @@ def create_app():
     @require_role("official")
     def official_dashboard():
         return render_template("official_dashboard.html")
+
+    @app.route("/health-admin-dashboard")
+    @require_role("health_admin")
+    def health_admin_dashboard():
+        return render_template("health_admin_dashboard.html")
+
+    @app.route("/authorities-dashboard")
+    @require_role("authority")
+    def authorities_dashboard():
+        return render_template("authorities_dashboard.html")
 
     @app.errorhandler(404)
     def not_found(_):
