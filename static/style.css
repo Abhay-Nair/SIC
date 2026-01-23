@@ -187,6 +187,20 @@ button.primary {
   font-weight: 500;
   font-size: 0.875rem;
 }
+/* 📊 Tier Badge */
+.tier-badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: white;
+  display: inline-block;
+}
+
+.tier-1 { background: #f59e0b; }   /* Amber */
+.tier-2 { background: #ef4444; }   /* Red */
+.tier-3 { background: #b91c1c; }   /* Dark Red */
+
 
 .pill.approved {
   color: var(--success);
@@ -384,4 +398,116 @@ input[type="file"]::file-selector-button {
 input[type="file"]::file-selector-button:hover {
   border-color: var(--accent);
   background: rgba(59, 130, 246, 0.1);
+}
+
+.qr-box textarea {
+  background: linear-gradient(145deg, #020617, #020617);
+  border: 2px dashed var(--border);
+  font-family: monospace;
+}
+
+.qr-box textarea:focus {
+  border-color: var(--accent);
+}
+
+.scan-approved {
+  border-left: 6px solid var(--success);
+}
+
+.scan-rejected {
+  border-left: 6px solid var(--danger);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.alert-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.alert-sub {
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.penalty-box {
+  background: rgba(245, 158, 11, 0.08);
+  border: 2px solid var(--warning);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.penalty-box h3 {
+  color: var(--warning);
+  margin-bottom: 10px;
+}
+
+.penalty-box .amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--danger);
+  margin-bottom: 8px;
+}
+
+.traveler-card {
+  position: relative;
+}
+
+.traveler-card::before {
+  content: "❌";
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 1.2rem;
+}
+
+/* 🔄 Scan Pulse Animation */
+.scan-pulse {
+  position: relative;
+}
+
+.scan-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 12px;
+  border: 2px solid var(--accent);
+  animation: pulse 1.2s infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* 🎨 Severity Themes */
+.theme-red {
+  background: rgba(239, 68, 68, 0.08);
+  border: 3px solid var(--danger);
+}
+
+.theme-green {
+  background: rgba(16, 185, 129, 0.08);
+  border: 3px solid var(--success);
+}
+
+.theme-amber {
+  background: rgba(245, 158, 11, 0.1);
+  border: 3px solid var(--warning);
+}
+
+
+.scan-card {
+  border-radius: 12px;
+  padding: 24px;
+  background: var(--card);
 }

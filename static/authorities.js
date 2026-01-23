@@ -22,6 +22,7 @@ scanBtn?.addEventListener("click", async () => {
 
 async function scanQR(qrData) {
   scanBtn.disabled = true;
+  scanBtn.classList.add("scan-pulse");
   scanBtn.innerHTML = '<span class="loading"></span> Scanning...';
   
   try {
@@ -45,6 +46,7 @@ async function scanQR(qrData) {
     toast.classList.add("error");
     scanResult.style.display = "none";
   } finally {
+    scanBtn.classList.remove("scan-pulse");
     scanBtn.disabled = false;
     scanBtn.innerHTML = "🔍 Scan QR Code";
   }
@@ -52,8 +54,11 @@ async function scanQR(qrData) {
 
 function displayScanResult(data) {
   scanResult.style.display = "block";
+
+  scanResult.classList.remove("theme-red", "theme-green", "theme-amber");
   
   if (data.flag === "RED") {
+    scanResult.classList.add("theme-red");
     // Disapproved traveler
     const tierColors = {1: "#ff9800", 2: "#f44336", 3: "#d32f2f"};
     const tierColor = tierColors[data.tier] || "#666";
@@ -61,25 +66,32 @@ function displayScanResult(data) {
     const penalty = penaltyAmounts[data.tier] || 5000;
     
     scanResult.innerHTML = `
-      <div style="background: #ffebee; border: 3px solid #f44336; border-radius: 12px; padding: 24px;">
+
+      <div class="scan-card">
         <div style="text-align: center; margin-bottom: 20px;">
           <div style="font-size: 72px; margin-bottom: 16px;">🚩</div>
           <h2 style="color: #d32f2f; margin-bottom: 8px;">RED FLAG - DISAPPROVED TRAVELER</h2>
           <p style="color: #c62828; font-weight: 600; font-size: 18px;">${data.message}</p>
         </div>
-        <div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+        <div style="background: #666; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
           <h3 style="margin-bottom: 16px;">Traveler Information:</h3>
           <div style="display: grid; gap: 12px;">
             <div><strong>Name:</strong> ${data.name}</div>
             <div><strong>Aadhar Number:</strong> ${data.aadhar}</div>
-            <div><strong>Tier:</strong> <span style="background: ${tierColor}; color: white; padding: 6px 16px; border-radius: 6px; font-weight: 600;">Tier ${data.tier}</span></div>
+            <div><strong>Tier:</strong>
+              <span class="tier-badge tier-${data.tier}">
+                Tier ${data.tier}
+              </span>
+            </div>
             ${data.disease_name ? `<div><strong>Disease:</strong> ${data.disease_name}</div>` : ''}
           </div>
         </div>
-        <div style="background: #fff3e0; border: 2px solid #ff9800; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-          <h3 style="margin-bottom: 12px; color: #e65100;">⚠️ Penalty Information</h3>
-          <p style="font-size: 18px; margin-bottom: 12px;"><strong>Penalty Amount:</strong> <span style="color: #d32f2f; font-size: 24px; font-weight: 700;">₹${penalty}</span></p>
-          <p style="color: #666; font-size: 14px;">Higher tier indicates more serious health concern, resulting in heavier penalty.</p>
+        <div class="penalty-box">
+          <h3>⚠️ Penalty Imposed</h3>
+          <p class="amount">₹${penalty}</p>
+          <p class="muted">
+            Higher tier indicates serious health risk and legal penalty.
+          </p>
         </div>
         <button onclick="levyPenalty('${data.aadhar}', ${penalty})" class="danger" style="width: 100%; padding: 14px; font-size: 16px; font-weight: 600;">
           ⚖️ Levy Penalty (₹${penalty})
@@ -87,9 +99,10 @@ function displayScanResult(data) {
       </div>
     `;
   } else if (data.flag === "GREEN") {
+    scanResult.classList.add("theme-green");
     // Approved traveler
     scanResult.innerHTML = `
-      <div style="background: #e8f5e9; border: 3px solid #4caf50; border-radius: 12px; padding: 24px;">
+      <div class="scan-card">
         <div style="text-align: center; margin-bottom: 20px;">
           <div style="font-size: 72px; margin-bottom: 16px;">✅</div>
           <h2 style="color: #2e7d32; margin-bottom: 8px;">GREEN FLAG - APPROVED TRAVELER</h2>
@@ -109,6 +122,7 @@ function displayScanResult(data) {
       </div>
     `;
   } else {
+    scanResult.classList.add("theme-amber");
     // Pending or other status
     scanResult.innerHTML = `
       <div style="background: #fff9c4; border: 3px solid #fbc02d; border-radius: 12px; padding: 24px;">

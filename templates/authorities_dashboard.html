@@ -23,18 +23,28 @@
       <p class="muted" style="line-height: 1.8; margin-bottom: 16px;">
         Scan QR codes from traveler health certificates. The system will automatically detect if a traveler is approved or disapproved.
       </p>
+
       <div style="display: grid; gap: 16px;">
-        <div>
-          <label style="display: block; margin-bottom: 8px; font-weight: 600;">QR Code Data (Paste or enter QR content)</label>
-          <textarea id="qr-input" rows="4" placeholder='Paste QR code JSON data here or scan QR code...' style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-family: monospace; font-size: 14px;"></textarea>
+
+        <div class="qr-box">
+          <label>QR Code Data</label>
+          <textarea id="qr-input" rows="4"
+            placeholder="Paste QR code JSON or scan QR..."
+          ></textarea>
         </div>
+
         <button id="scan-btn" class="primary" style="padding: 14px; font-size: 16px;">
           🔍 Scan QR Code
         </button>
+
+        <!-- 🔥 THIS IS REQUIRED -->
+        <div id="scan-result" style="display: none; margin-top: 24px;"></div>
+
       </div>
     </section>
+
+
     
-    <section id="scan-result" style="display: none;" class="card" style="margin-bottom: 24px;"></section>
     
     <section class="card" style="margin-bottom: 24px;">
       <h2>📋 Disapproved Travelers Database</h2>
