@@ -9,7 +9,7 @@
 
 **A comprehensive healthcare management system for migrant workers**
 
-[Live Demo](#) • [Report Bug](https://github.com/Abhay-Nair/SIC/issues) • [Request Feature](https://github.com/Abhay-Nair/SIC/issues)
+ • [Report Bug](https://github.com/Abhay-Nair/SIC/issues) • [Request Feature](https://github.com/Abhay-Nair/SIC/issues)
 
 </div>
 
@@ -211,18 +211,6 @@ SIC/
 └── README.md
 ```
 
-## 📸 Screenshots
-
-> 📝 **Note**: Add screenshots of your application here
-
-### Landing Page
-![Landing Page](screenshots/landing.png)
-
-### Migrant Dashboard
-![Migrant Dashboard](screenshots/migrant-dashboard.png)
-
-### Doctor Dashboard
-![Doctor Dashboard](screenshots/doctor-dashboard.png)
 
 ## 🗺️ Roadmap
 
