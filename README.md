@@ -251,8 +251,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 - [Flask Documentation](https://flask.palletsprojects.com/)
 - [SQLite](https://www.sqlite.org/)
-- [Font Awesome](https://fontawesome.com) (if used)
-- [Bootstrap](https://getbootstrap.com) (if used)
 
 ---
 
